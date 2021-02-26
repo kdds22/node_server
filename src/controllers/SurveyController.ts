@@ -12,7 +12,7 @@ class SurveyController {
         const isAlreadyExists = await surveyRepository.findOne({ title });
 
         if (isAlreadyExists) {
-            return res.status(201).json({ message: "Já existe uma pesquisa com o título informado." }).send();
+            return res.status(400).json({ message: "Já existe uma pesquisa com o título informado." }).send();
         }
 
         const survey = surveyRepository.create({
@@ -22,7 +22,13 @@ class SurveyController {
 
         await surveyRepository.save(survey);
 
-        return res.status(200).json(survey).send();
+        return res.status(201).json(survey).send();
+    }
+
+    async show(req: Request, res: Response) {
+        const surveyRepository = getCustomRepository(SurveyRepository);
+        const all = await surveyRepository.find();
+        return res.status(200).json(all).send();
     }
 }
 
